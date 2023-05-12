@@ -18,3 +18,9 @@ Route::get('/students/{id}', [StudentController::class, 'show']);
 Route::patch('/students/update/{id}', [StudentController::class, 'update']);
 // menghapus data tertentu
 Route::delete('/students/delete/{id}', [StudentController::class, 'destroy']);
+// menampilkan seluruh data yang sudah dihapus sementara oleh softdeletes
+Route::get('/students/show/trash', [StudentController::class, 'trash']);
+// mengembalikan data spesifik yang sudah dihapus
+Route::get('/students/trash/restore/{id}', [StudentController::class, 'restore']);
+// menghapus permanen data tertentu
+Route::get('/students/trash/delete/permanent/{id}', [StudentController::class, 'permanentDelete']);

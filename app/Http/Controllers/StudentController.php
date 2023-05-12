@@ -165,4 +165,54 @@ class StudentController extends Controller
             return ApiFormatter::createAPI(400, 'error', $error->getMessage());
         }
     }
+
+    public function trash()
+    {
+        try {
+            //ambil data yg sdh dihps sementara
+            $students = Student::onlyTrashed()->get();
+            if ($students) {
+                // kalau data berhasil terambil, tampilkan status 200 dengan data dari $students
+                return ApiFormatter::createAPI(200, 'success', $students);
+            }else {
+                return ApiFormatter::createAPI(400, 'failed');
+            }
+        } catch (Exception $error) {
+            // kalau ada error di try, catch akan menampilkan desc error nya
+            return ApiFormatter::createAPI(400, 'error', $error->getMessage());
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            //ambil data yang akan di batal hapus, diambil berdasarkan id dari route nya
+            $student = Student::onlyTrashed()->where('id', $id);
+            // kembalikan data
+            $student->restore();
+            // ambil kembali data yg sudah di restore
+            $dataKembali = Student::where('id', $id)->first();
+            if ($dataKembali) {
+                // jika seluruh proses nya dapat dijalankan, data yg sudah dikembalikan dan diambil tadi ditampilkan pada response 200
+                return ApiFormatter::createAPI(200, 'success', $dataKembali);
+            }else {
+                return ApiFormatter::createAPI(400, 'failed');
+            }
+        } catch (Exception $error) {
+            return ApiFormatter::createAPI(400, 'error', $error->getMessage());
+        }
+    }
+
+    public function permanentDelete($id)
+    {
+        try {
+            // ambil data yang akan dihps
+            $student = Student::onlyTrashed()->where('id', $id);
+            // hapus permanen data yg diambil
+            $proses = $student->forceDelete();
+            return ApiFormatter::createAPI(200, 'success', 'Berhasil hapus permanen!');
+        } catch (Exception $error) {
+            return ApiFormatter::createAPI(400, 'error', $error->getMessage());
+        }
+    }
 }

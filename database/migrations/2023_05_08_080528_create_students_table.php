@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('nis')->max(8);
             $table->string('rombel')->max(10);
             $table->string('rayon')->max(10);
+            // menambahkan column deleted_at yang akan berisi tanggal data dihapus sementara
+            $table->softDeletes();
             $table->timestamps();
         });
     }
