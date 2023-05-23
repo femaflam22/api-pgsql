@@ -75,7 +75,7 @@ class StudentController extends Controller
 
     public function createToken()
     {
-        return csrf_token();
+        return response()->json(csrf_token());
     }
     /**
      * Display the specified resource.
